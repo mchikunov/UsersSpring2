@@ -1,0 +1,19 @@
+CREATE DATABASE 'User' CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE Users;
+
+CREATE TABLE `user` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `FName` varchar(128) NOT NULL SET utf8,
+  `SName` varchar(45) NOT NULL,
+  `age` float NOT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `user_id_UNIQUE` (`user_id`),
+  UNIQUE KEY `FName_UNIQUE` (`FName`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=UTF8
+
+ALTER TABLE user MODIFY COLUMN FName VARCHAR(255)
+CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+
+ALTER TABLE user MODIFY COLUMN SName VARCHAR(255)
+CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+
