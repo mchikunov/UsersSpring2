@@ -1,14 +1,21 @@
 package net.codejava.javaee.bookstore.servlets;
 
 import net.codejava.javaee.bookstore.model.User;
-import net.codejava.javaee.bookstore.service.UserDAOFactory;
 import net.codejava.javaee.bookstore.service.UserService;
 import net.codejava.javaee.bookstore.service.UserServiceImpl;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.SQLException;
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,61 +23,133 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-/**
- * ControllerServlet.java
- * This servlet acts as a page controller for the application, handling all
- * requests from the user.
- * @author www.codejava.net
- */
+@Controller
 
-@WebServlet("/NNN")
-public class ControllerServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private UserService db;
+public class ControllerServlet {
 
-	public void init() {
 
-        try {
-            db = UserServiceImpl.getInstance();
-        } catch (SQLException e) {
-            e.printStackTrace();
+
+    @Autowired
+    private UserService db;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
+
+
+    @RequestMapping("/")
+    public ModelAndView wlc (@RequestParam(value = "error", required = false) String error) {
+
+
+        ModelAndView mw = new ModelAndView();
+        if (error != null) {
+            mw.addObject("error", "Invalid username and password!");
         }
-        InputStream input = getServletContext().getResourceAsStream("/WEB-INF/confDb.propertiess");
-        System.out.println(input);
-
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-        try {
-            listBook(request, response);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        mw.setViewName("login");
+        return mw;
     }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-	   String sss = request.getParameter("un");
-        System.out.println(sss);
-        try {
-            listBook(request, response);
+    @RequestMapping("/user")
+    public ModelAndView login () {
+        org.springframework.security.core.userdetails.User user = null;
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            Object principal = auth.getPrincipal();
+                user = (org.springframework.security.core.userdetails.User) principal;
 
-
-        } catch (SQLException ex) {
-            throw new ServletException(ex);
         }
+            Collection<GrantedAuthority> userRole = user.getAuthorities();
+            System.out.println(userRole);
+
+            ModelAndView mw = new ModelAndView();
+            mw.addObject(user);
+            mw.setViewName("UserForm");
+            return mw;
+
     }
 
-        private void listBook(HttpServletRequest request, HttpServletResponse response)
-            throws SQLException, IOException, ServletException {
-                List<User>  listUsers = db.listAll();
-            request.setAttribute("listUsers", listUsers);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("BookList.jsp");
-            dispatcher.forward(request, response);
-        }
-	}
+    @RequestMapping("/admin")
+    public ModelAndView listAll() throws SQLException {
+        List<User> listUsers = db.listAll();
+        ModelAndView mw = new ModelAndView();
+        mw.addObject("listUsers", listUsers);
+        mw.setViewName("BookList");
+        return mw;
+    }
+
+    @RequestMapping("/edit")
+    public ModelAndView edit (@RequestParam("id") int id) throws SQLException {
+        User existingUser = db.get(id);
+        ModelAndView mw = new ModelAndView();
+        mw.addObject("user", existingUser);
+        mw.setViewName("BookForm");
+        return mw;
+    }
+
+    @RequestMapping("/new")
+    public ModelAndView new1() {
+        ModelAndView mw = new ModelAndView();
+        mw.setViewName("BookForm");
+        return mw;
+    }
+
+
+    @RequestMapping("/insert")
+    public ModelAndView insert (@RequestParam("FName") String fName,
+                                @RequestParam("SName") String sName,
+                                @RequestParam("age") Float age,
+                                @RequestParam("role") String role
+    ) throws SQLException {
+        fName = passwordEncoder.encode(fName);
+        User newUser = new User(fName, sName, age, role);
+        db.insert(newUser);
+        return listAll();
+    }
+
+    @RequestMapping("/update1")
+    public ModelAndView update (@RequestParam("id") int id,
+                                @RequestParam("FName") String fName,
+                                @RequestParam("SName") String sName,
+                                @RequestParam("age") Float age,
+                                @RequestParam("role") String role
+
+
+    ) throws SQLException {
+
+      User user = new User(id, fName, sName, age, role);
+
+        db.update(user);
+        return listAll();
+    }
+
+    @RequestMapping("/delete")
+    public ModelAndView delete (@RequestParam("id") int id) throws SQLException {
+        db.delete(id);
+        return listAll();
+    }
+
+
+
+
+
+
+
+
+}
+
+
+
+
 
 
 

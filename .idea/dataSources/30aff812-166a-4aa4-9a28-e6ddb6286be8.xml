@@ -1107,116 +1107,154 @@
       <Charset>utf8mb4</Charset>
       <DefaultForCharset>0</DefaultForCharset>
     </collation>
-    <table id="278" parent="2" name="book">
-      <Collation>utf8mb4_0900_ai_ci</Collation>
-    </table>
-    <table id="279" parent="2" name="users">
-      <Collation>utf8mb4_0900_ai_ci</Collation>
-    </table>
-    <column id="280" parent="278" name="book_id">
+    <table id="278" parent="2" name="role_id"/>
+    <table id="279" parent="2" name="roles"/>
+    <table id="280" parent="2" name="user_id__role_id"/>
+    <table id="281" parent="2" name="users"/>
+    <column id="282" parent="278" name="users_user_id">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
-      <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="281" parent="278" name="FName">
+    <column id="283" parent="278" name="roles1_role_id">
       <Position>2</Position>
-      <DataType>varchar(128)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-      <Collation>latin1_swedish_ci</Collation>
-    </column>
-    <column id="282" parent="278" name="SName">
-      <Position>3</Position>
-      <DataType>varchar(45)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-      <Collation>latin1_swedish_ci</Collation>
-    </column>
-    <column id="283" parent="278" name="Age">
-      <Position>4</Position>
-      <DataType>float|0s</DataType>
+      <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="284" parent="278" name="book_id_UNIQUE">
-      <ColNames>book_id</ColNames>
+    <index id="284" parent="278" name="UK_ox8qrwpsjgqanjsags33g5rlx">
+      <ColNames>roles1_role_id</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <index id="285" parent="278" name="title_UNIQUE">
-      <ColNames>FName</ColNames>
-      <Unique>1</Unique>
-      <Type>btree</Type>
-    </index>
-    <key id="286" parent="278" name="PRIMARY">
+    <key id="285" parent="278" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
-      <ColNames>book_id</ColNames>
+      <ColNames>users_user_id
+roles1_role_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="287" parent="278" name="book_id_UNIQUE">
-      <ColNames>book_id</ColNames>
-      <UnderlyingIndexName>book_id_UNIQUE</UnderlyingIndexName>
+    <key id="286" parent="278" name="UK_ox8qrwpsjgqanjsags33g5rlx">
+      <ColNames>roles1_role_id</ColNames>
+      <UnderlyingIndexName>UK_ox8qrwpsjgqanjsags33g5rlx</UnderlyingIndexName>
     </key>
-    <key id="288" parent="278" name="title_UNIQUE">
-      <ColNames>FName</ColNames>
-      <UnderlyingIndexName>title_UNIQUE</UnderlyingIndexName>
-    </key>
-    <column id="289" parent="279" name="user_id">
+    <foreign-key id="287" parent="278" name="FK_nwkgvgjoxpo8ypi3jhjmv8i0o">
+      <ColNames>users_user_id</ColNames>
+      <RefSchemaName>bookstore</RefSchemaName>
+      <RefTableName>users</RefTableName>
+      <RefColNames>user_id</RefColNames>
+    </foreign-key>
+    <foreign-key id="288" parent="278" name="FK_ox8qrwpsjgqanjsags33g5rlx">
+      <ColNames>roles1_role_id</ColNames>
+      <RefSchemaName>bookstore</RefSchemaName>
+      <RefTableName>roles</RefTableName>
+      <RefColNames>role_id</RefColNames>
+    </foreign-key>
+    <column id="289" parent="279" name="role_id">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="290" parent="279" name="FName">
+    <column id="290" parent="279" name="role">
       <Position>2</Position>
       <DataType>varchar(255)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="291" parent="279" name="UK_g50w4r0ru3g9uf6i6fr4kpro8">
+      <ColNames>role</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <key id="292" parent="279" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>role_id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="293" parent="279" name="UK_g50w4r0ru3g9uf6i6fr4kpro8">
+      <ColNames>role</ColNames>
+      <UnderlyingIndexName>UK_g50w4r0ru3g9uf6i6fr4kpro8</UnderlyingIndexName>
+    </key>
+    <column id="294" parent="280" name="user_id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
-      <Collation>utf8_general_ci</Collation>
     </column>
-    <column id="291" parent="279" name="SName">
+    <column id="295" parent="280" name="role_id">
+      <Position>2</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="296" parent="280" name="FK_t0fd6jrhofbxjx7cqyvusmu5q">
+      <ColNames>role_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="297" parent="280" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>user_id
+role_id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="298" parent="280" name="FK_eb5fc8h4q99lgobys0xwrlol4">
+      <ColNames>user_id</ColNames>
+      <RefSchemaName>bookstore</RefSchemaName>
+      <RefTableName>users</RefTableName>
+      <RefColNames>user_id</RefColNames>
+    </foreign-key>
+    <foreign-key id="299" parent="280" name="FK_t0fd6jrhofbxjx7cqyvusmu5q">
+      <ColNames>role_id</ColNames>
+      <RefSchemaName>bookstore</RefSchemaName>
+      <RefTableName>roles</RefTableName>
+      <RefColNames>role_id</RefColNames>
+    </foreign-key>
+    <column id="300" parent="281" name="user_id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="301" parent="281" name="age">
+      <Position>2</Position>
+      <DataType>float|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="302" parent="281" name="FName">
       <Position>3</Position>
       <DataType>varchar(255)|0s</DataType>
-      <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
-      <Collation>utf8_general_ci</Collation>
     </column>
-    <column id="292" parent="279" name="age">
+    <column id="303" parent="281" name="role">
       <Position>4</Position>
-      <DataType>float|0s</DataType>
-      <NotNull>1</NotNull>
+      <DataType>varchar(255)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="293" parent="279" name="role">
+    <column id="304" parent="281" name="SName">
       <Position>5</Position>
       <DataType>varchar(255)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="294" parent="279" name="user_id_UNIQUE">
-      <ColNames>user_id</ColNames>
-      <Unique>1</Unique>
-      <Type>btree</Type>
-    </index>
-    <index id="295" parent="279" name="FName_UNIQUE">
+    <column id="305" parent="281" name="roles1">
+      <Position>6</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="306" parent="281" name="UK_empdutebkf3rnowo9brt4ynwa">
       <ColNames>FName</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <key id="296" parent="279" name="PRIMARY">
+    <key id="307" parent="281" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>user_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="297" parent="279" name="user_id_UNIQUE">
-      <ColNames>user_id</ColNames>
-      <UnderlyingIndexName>user_id_UNIQUE</UnderlyingIndexName>
-    </key>
-    <key id="298" parent="279" name="FName_UNIQUE">
+    <key id="308" parent="281" name="UK_empdutebkf3rnowo9brt4ynwa">
       <ColNames>FName</ColNames>
-      <UnderlyingIndexName>FName_UNIQUE</UnderlyingIndexName>
+      <UnderlyingIndexName>UK_empdutebkf3rnowo9brt4ynwa</UnderlyingIndexName>
     </key>
   </database-model>
 </dataSource>

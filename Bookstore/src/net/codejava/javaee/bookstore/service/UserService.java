@@ -15,7 +15,7 @@ public interface UserService {
 
     boolean update(User user) throws SQLException;
 
-    void delete(User user) throws SQLException;
+    void delete(int id) throws SQLException;
 
     User find(String username) throws SQLException;
 

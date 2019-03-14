@@ -1,11 +1,12 @@
 package net.codejava.javaee.bookstore.model;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.*;
 
 
 /**
@@ -17,7 +18,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "users")
-public class User implements Serializable {
+public class User implements Serializable, UserDetails {
 	private static final long serialVersionUID = 1L;
 
 
@@ -39,6 +40,9 @@ public class User implements Serializable {
     @Column(name = "role")
     private String Role;
 
+ // private Set<Roles> roles = new HashSet<Roles>(0);
+    private String roles1;
+
 
 	public User() {
 	}
@@ -47,9 +51,12 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
+
+
 	public User(int id, String FName, String SName, float Age, String Role) {
 		this(FName, SName, Age, Role);
 		this.id = id;
+
 	}
 	
 	public User(String FName, String SName, float Age, String Role) {
@@ -57,7 +64,36 @@ public class User implements Serializable {
 		this.SName = SName;
 		this.Age = Age;
         this.Role = Role;
+
 	}
+
+   /* @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "role_id")
+    private Roles roles2;
+
+    public Roles getRoles1() {
+        return roles2;
+    }*/
+
+   @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_id__role_id", joinColumns = {
+            @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "role_id") })
+    private Set<Roles> roles3;
+
+	public Set<GrantedAuthority> getAuthorities() {
+
+		HashSet<GrantedAuthority>roles = new HashSet<>(roles3.size());
+
+		for (Roles role : roles3)
+			roles.add(new SimpleGrantedAuthority(role.getAuthority()));
+		return roles;
+	}
+
+
+
+
+
 
 	public int getId() {
 		return id;
@@ -67,15 +103,22 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
+	public String getPassword() {
+		return FName;
+	}
+
 	public String getFName() {
 		return FName;
 	}
 
+	public String getSName() {
+		return SName;
+	}
 	public void setFName(String FName) {
 		this.FName = FName;
 	}
 
-	public String getSName() {
+	public String getUsername() {
 		return SName;
 	}
 
@@ -98,5 +141,14 @@ public class User implements Serializable {
     public void setRole(String role) {
         Role = role;
     }
+
+
+	public boolean isAccountNonExpired() {return true;}
+
+	public boolean isAccountNonLocked()  {return true;}
+
+	public boolean isCredentialsNonExpired()  {return true;}
+
+	public boolean isEnabled()  {return true;}
 
 }
