@@ -1,6 +1,7 @@
 package net.codejava.javaee.bookstore.dao;
 
 import net.codejava.javaee.bookstore.model.User;
+import org.hibernate.HibernateException;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -18,6 +19,8 @@ public interface UserDAO {
     User getUser(int id) throws SQLException;
 
     User findUser(String username) throws SQLException;
+
+    int findRoleId (String user) throws HibernateException;
 
 
 }

@@ -1,6 +1,7 @@
 package net.codejava.javaee.bookstore.service;
 import net.codejava.javaee.bookstore.dao.UserDAO;
 import net.codejava.javaee.bookstore.model.User;
+import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -53,7 +54,10 @@ public final class UserServiceImpl implements UserService{
         return userDAO.findUser(username);
     }
 
+    public int findRoleId (String user) throws HibernateException{
 
+        return userDAO.findRoleId(user);
+    }
 
     }
 

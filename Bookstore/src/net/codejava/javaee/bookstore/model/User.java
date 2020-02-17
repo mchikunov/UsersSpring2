@@ -53,17 +53,32 @@ public class User implements Serializable, UserDetails {
 
 
 
-	public User(int id, String FName, String SName, float Age, String Role) {
-		this(FName, SName, Age, Role);
+	public User(int id, String FName, String SName, float Age, Set<Roles> roles3) {
+		this(FName, SName, Age, roles3);
 		this.id = id;
 
 	}
 	
+	public User(String FName, String SName, float Age, Set<Roles> roles3) {
+		this.FName = FName;
+		this.SName = SName;
+		this.Age = Age;
+        this.roles3 = roles3;
+
+      //  roles3.add(new Roles(idRole, Role));
+
+
+	}
+
+
 	public User(String FName, String SName, float Age, String Role) {
 		this.FName = FName;
 		this.SName = SName;
 		this.Age = Age;
-        this.Role = Role;
+		this.Role = Role;
+
+		//  roles3.add(new Roles(idRole, Role));
+
 
 	}
 
@@ -75,7 +90,7 @@ public class User implements Serializable, UserDetails {
         return roles2;
     }*/
 
-   @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+   @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE,CascadeType.REFRESH})
     @JoinTable(name = "user_id__role_id", joinColumns = {
             @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "role_id") })

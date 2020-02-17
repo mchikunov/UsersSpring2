@@ -1,6 +1,7 @@
 package net.codejava.javaee.bookstore.SpringConfig;
 
 import net.codejava.javaee.bookstore.Utils.PropertyReader;
+import net.codejava.javaee.bookstore.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +39,7 @@ em.setJpaVendorAdapter(vendorAdapter);
 em.setJpaProperties(additionalProperties());
 return em;
 }
+
 
 @Bean
 public DataSource dataSource(){

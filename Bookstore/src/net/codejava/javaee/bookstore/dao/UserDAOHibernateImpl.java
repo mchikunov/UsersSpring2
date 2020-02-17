@@ -1,6 +1,7 @@
 package net.codejava.javaee.bookstore.dao;
 
 import net.codejava.javaee.bookstore.Utils.HibernateInstance;
+import net.codejava.javaee.bookstore.model.Roles;
 import net.codejava.javaee.bookstore.model.User;
 import org.hibernate.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.swing.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,6 +85,16 @@ public class UserDAOHibernateImpl implements UserDAO {
 
 
     }
+
+    @Override
+   public int findRoleId (String user) throws HibernateException{
+
+       Roles role = (Roles)em.createQuery("select c from Roles c where c.roles = :name")
+               .setParameter("name", user)
+               .getSingleResult();
+
+       return role.getId();
+   }
 
 
 

@@ -1,6 +1,7 @@
 package net.codejava.javaee.bookstore.service;
 
 import net.codejava.javaee.bookstore.model.User;
+import org.hibernate.HibernateException;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -18,5 +19,7 @@ public interface UserService {
     void delete(int id) throws SQLException;
 
     User find(String username) throws SQLException;
+
+    int findRoleId (String user) throws HibernateException;
 
 }

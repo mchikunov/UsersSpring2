@@ -25,6 +25,11 @@ public class Roles implements GrantedAuthority {
         this.roles = roles;
     }
 
+
+    public Roles(String roles) {
+        this.roles = roles;
+    }
+
     public Roles() {}
 
  // @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles3")
